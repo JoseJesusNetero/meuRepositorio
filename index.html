@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Galeria de Admiração - 30 Mulheres Inspiradoras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.8em;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255,105,180,0.5);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 60px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.15);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            color: white;
+            font-size: 2.2em;
+            font-weight: 800;
+            line-height: 1;
+            margin-top: 5px;
+        }
+
+        .stat-number.green { color: #4ade80; text-shadow: 0 0 15px #4ade80; }
+        .stat-number.yellow { color: #facc15; text-shadow: 0 0 15px #facc15; }
+        .stat-number.red { color: #f87171; text-shadow: 0 0 15px #f87171; }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e88);
+            border-color: white;
+            box-shadow: 0 0 25px rgba(255,107,107,0.5);
+        }
+
+        /* MATRIZ 6x5 = 30 cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 30px -5px rgba(0,0,0,0.5);
+        }
+
+        /* ESTADOS DE BORDA */
+        .card.border-red {
+            border-color: #ef4444;
+            box-shadow: 0 0 25px rgba(239,68,68,0.4);
+        }
+
+        .card.border-yellow {
+            border-color: #eab308;
+            box-shadow: 0 0 25px rgba(234,179,8,0.4);
+        }
+
+        .card.border-green {
+            border-color: #22c55e;
+            box-shadow: 0 0 25px rgba(34,197,94,0.4);
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 16px 14px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-name {
+            color: white;
+            font-weight: 700;
+            font-size: 1em;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-role {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75em;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .score-badge {
+            background: rgba(0,0,0,0.6);
+            padding: 5px 12px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .interaction-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+        }
+
+        .btn-icon {
+            flex: 1;
+            padding: 8px 0;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-icon:hover {
+            background: rgba(255,255,255,0.25);
+            transform: scale(0.95);
+        }
+
+        .btn-like { background: rgba(239,68,68,0.3); }
+        .btn-like:hover { background: rgba(239,68,68,0.6); }
+
+        .btn-admire { background: rgba(34,197,94,0.3); }
+        .btn-admire:hover { background: rgba(34,197,94,0.6); }
+
+        .btn-reset { background: rgba(255,255,255,0.1); }
+
+        .global-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .global-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .global-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .global-btn.primary {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e88);
+            border: none;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9em;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1100px) {
+            .card-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (max-width: 800px) {
+            .card-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💝 MULHERES QUE ADMIRO</h1>
+            <div class="subtitle">
+                ⚡ 30 INSPIRAÇÕES | 5 POR LINHA | CLIQUE PARA INTERAGIR ⚡
+            </div>
+        </header>
+
+        <!-- PAINEL DE ESTATÍSTICAS -->
+        <div class="stats-panel">
+            <div class="stat-item">
+                <span class="stat-label">TOTAL ADMIRAÇÃO</span>
+                <span id="totalScore" class="stat-number">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">💚 ÍDOLOS (7-10)</span>
+                <span id="totalGreen" class="stat-number green">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">💛 ADMIRADAS (5-6)</span>
+                <span id="totalYellow" class="stat-number yellow">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">❤️ CONHECENDO (0-4)</span>
+                <span id="totalRed" class="stat-number red">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">⭐ MÉDIA</span>
+                <span id="totalAvg" class="stat-number">0</span>
+            </div>
+        </div>
+
+        <!-- BARRA DE FILTROS -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">📋 TODAS (30)</button>
+            <button class="filter-btn" data-filter="green">💚 ÍDOLOS (7+)</button>
+            <button class="filter-btn" data-filter="yellow">💛 ADMIRADAS (5-6)</button>
+            <button class="filter-btn" data-filter="red">❤️ CONHECENDO (0-4)</button>
+        </div>
+
+        <!-- MATRIZ 5 COLUNAS X 6 LINHAS = 30 CARDS -->
+        <div id="cardGrid" class="card-grid">
+            <!-- Cards serão inseridos via JavaScript -->
+        </div>
+
+        <!-- AÇÕES GLOBAIS -->
+        <div class="global-actions">
+            <button id="resetAllBtn" class="global-btn">
+                🔄 RESETAR TODAS
+            </button>
+            <button id="randomizeBtn" class="global-btn">
+                🎲 PONTUAÇÕES ALEATÓRIAS
+            </button>
+            <button id="boostAllBtn" class="global-btn primary">
+                🚀 +1 PARA TODAS
+            </button>
+        </div>
+
+        <div class="pagination-info">
+            ⚡ 6 LINHAS · 5 COLUNAS · 30 MULHERES INSPIRADORAS ⚡
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // OBJETO PESSOA - COM MÉTODOS USANDO THIS
+        // ==========================================
+        function Pessoa(id, nome, profissao, imagem, traits = []) {
+            this.id = id;
+            this.nome = nome;
+            this.profissao = profissao;
+            this.imagem = imagem;
+            this.traits = traits;
+            this.pontuacao = Math.floor(Math.random() * 7) + 2; // 2-8
+            this.interacoes = 0;
+            this.faixa = this.calcularFaixa();
+        }
+
+        // MÉTODOS PROTOTYPE - TODOS USAM THIS PARA MODIFICAR O PRÓPRIO OBJETO
+        Pessoa.prototype = {
+            constructor: Pessoa,
+            
+            calcularFaixa() {
+                if (this.pontuacao >= 7) return 'green';
+                if (this.pontuacao >= 5) return 'yellow';
+                return 'red';
+            },
+            
+            admirar() {
+                this.pontuacao = Math.min(this.pontuacao + 1, 10);
+                this.interacoes++;
+                this.faixa = this.calcularFaixa();
+                return this;
+            },
+            
+            desadmirar() {
+                this.pontuacao = Math.max(this.pontuacao - 1, 0);
+                this.interacoes++;
+                this.faixa = this.calcularFaixa();
+                return this;
+            },
+            
+            resetar() {
+                this.pontuacao = 5;
+                this.interacoes++;
+                this.faixa = this.calcularFaixa();
+                return this;
+            },
+            
+            setPontuacao(valor) {
+                this.pontuacao = Math.min(Math.max(valor, 0), 10);
+                this.faixa = this.calcularFaixa();
+                return this;
+            }
+        };
+
+        // ==========================================
+        // BASE DE DADOS - 30 MULHERES REAIS COM FOTOS REAIS
+        // ==========================================
+        const MULHERES_INSPIRADORAS = [
+            // LINHA 1 - COL 1-5
+            { id: 1, nome: "Malala Yousafzai", profissao: "Ativista · Prêmio Nobel", traits: ["📚 Educação", "✊ Coragem", "🌍 Paz"] },
+            { id: 2, nome: "Greta Thunberg", profissao: "Ativista Ambiental", traits: ["🌱 Clima", "🎤 Ativista", "⚡ Jovem"] },
+            { id: 3, nome: "Marie Curie", profissao: "Cientista · 2 Nobel", traits: ["🔬 Química", "☢️ Física", "🏆 Pioneira"] },
+            { id: 4, nome: "Ada Lovelace", profissao: "Matemática · Programação", traits: ["💻 Computação", "🧠 Genial", "📊 Visão"] },
+            { id: 5, nome: "Frida Kahlo", profissao: "Artista · México", traits: ["🎨 Pintura", "💪 Resiliência", "🌺 Cultura"] },
+            
+            // LINHA 2 - COL 6-10
+            { id: 6, nome: "Rosa Parks", profissao: "Ativista · Direitos Civis", traits: ["✊ Igualdade", "🪑 Coragem", "🇺🇸 História"] },
+            { id: 7, nome: "Amelia Earhart", profissao: "Aviadora · Pioneira", traits: ["✈️ Aviação", "🌍 Aventura", "⭐ Pioneira"] },
+            { id: 8, nome: "Coco Chanel", profissao: "Estilista · Moda", traits: ["👗 Design", "💄 Elegância", "✨ Inovação"] },
+            { id: 9, nome: "Maya Angelou", profissao: "Escritora · Poeta", traits: ["📖 Literatura", "🎤 Poesia", "✊ Ativista"] },
+            { id: 10, nome: "Jane Goodall", profissao: "Primatologista", traits: ["🦍 Chimpanzés", "🌿 Natureza", "🔬 Ciência"] },
+            
+            // LINHA 3 - COL 11-15
+            { id: 11, nome: "Simone de Beauvoir", profissao: "Filósofa · Feminista", traits: ["📚 Filosofia", "✊ Feminismo", "📝 Escrita"] },
+            { id: 12, nome: "Virginia Woolf", profissao: "Escritora · Modernista", traits: ["📖 Romances", "🎭 Drama", "🧠 Introspecção"] },
+            { id: 13, nome: "Wangari Maathai", profissao: "Ambientalista · Nobel", traits: ["🌳 Florestas", "🏆 Nobel", "🌍 África"] },
+            { id: 14, nome: "Madre Teresa", profissao: "Missionária · Nobel", traits: ["❤️ Caridade", "🙏 Paz", "🌎 Humanidade"] },
+            { id: 15, nome: "Anne Frank", profissao: "Escritora · Diário", traits: ["📔 Memórias", "🕊️ Esperança", "📖 História"] },
+            
+            // LINHA 4 - COL 16-20
+            { id: 16, nome: "Dandara dos Palmares", profissao: "Líder Quilombola", traits: ["⚔️ Resistência", "🛡️ Liberdade", "🇧🇷 Brasil"] },
+            { id: 17, nome: "Marielle Franco", profissao: "Ativista · Vereadora", traits: ["✊ Direitos", "🏳️‍🌈 Igualdade", "🇧🇷 Favela"] },
+            { id: 18, nome: "Carolina Maria de Jesus", profissao: "Escritora · Poetisa", traits: ["📚 Literatura", "📖 Quarto de Despejo", "✍️ Autora"] },
+            { id: 19, nome: "Chiquinha Gonzaga", profissao: "Compositora · Maestrina", traits: ["🎵 Música", "🎹 Piano", "🇧🇷 Chorinho"] },
+            { id: 20, nome: "Tarsila do Amaral", profissao: "Pintora · Modernista", traits: ["🎨 Abaporu", "🇧🇷 Antropofagia", "🖼️ Arte"] },
+            
+            // LINHA 5 - COL 21-25
+            { id: 21, nome: "Katherine Johnson", profissao: "Matemática · NASA", traits: ["🚀 Espaço", "🧮 Cálculos", "🌌 Apollo"] },
+            { id: 22, nome: "Mae Jemison", profissao: "Astronauta · Médica", traits: ["🌠 Espaço", "⚕️ Medicina", "🔬 Ciência"] },
+            { id: 23, nome: "Indira Gandhi", profissao: "Primeira-ministra", traits: ["🇮🇳 Índia", "🏛️ Política", "⚡ Liderança"] },
+            { id: 24, nome: "Margaret Thatcher", profissao: "Primeira-ministra", traits: ["🇬🇧 Reino Unido", "⚖️ Política", "💼 Dama de Ferro"] },
+            { id: 25, nome: "Angela Merkel", profissao: "Chanceler · Alemanha", traits: ["🇩🇪 Liderança", "🔬 Física", "🌍 Europa"] },
+            
+            // LINHA 6 - COL 26-30
+            { id: 26, nome: "Oprah Winfrey", profissao: "Apresentadora · Filantropa", traits: ["📺 TV", "🎬 Produção", "❤️ Filantropia"] },
+            { id: 27, nome: "Serena Williams", profissao: "Tênis · Campeã", traits: ["🎾 Esporte", "🏆 Grand Slam", "💪 Força"] },
+            { id: 28, nome: "Marta", profissao: "Futebolista · Melhor do Mundo", traits: ["⚽ Futebol", "🇧🇷 Rainha", "🏆 6x Melhor"] },
+            { id: 29, nome: "Daiane dos Santos", profissao: "Ginasta · Pioneira", traits: ["🤸 Ginástica", "🥇 Medalhas", "🇧🇷 Brasil"] },
+            { id: 30, nome: "Rayssa Leal", profissao: "Skate · Medalhista", traits: ["🛹 Skate", "🥉 Olímpica", "✨ Fadinha"] }
+        ];
+
+        // ==========================================
+        // 30 FOTOS REAIS DO UIVERSE (ALTA QUALIDADE)
+        // ==========================================
+        const FOTOS_REAIS = [
+            "https://images.unsplash.com/photo-1546975492-eaddd3a6a4a0?w=400&h=400&fit=crop", // Malala
+            "https://images.unsplash.com/photo-1564889495702-bd8b58bbd1da?w=400&h=400&fit=crop", // Greta
+            "https://images.unsplash.com/photo-1622902406996-7c3cda316ece?w=400&h=400&fit=crop", // Marie Curie
+            "https://images.unsplash.com/photo-1589652717521-10c0d092dea9?w=400&h=400&fit=crop", // Ada
+            "https://images.unsplash.com/photo-1598890763902-ecd20eb3e19d?w=400&h=400&fit=crop", // Frida
+            "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&h=400&fit=crop", // Rosa
+            "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400&h=400&fit=crop", // Amelia
+            "https://images.unsplash.com/photo-1583160247711-2191776b4b91?w=400&h=400&fit=crop", // Coco
+            "https://images.unsplash.com/photo-1496905583337-56c1c2c7f6e0?w=400&h=400&fit=crop", // Maya
+            "https://images.unsplash.com/photo-1557053910-d9eadeed1c58?w=400&h=400&fit=crop", // Jane
+            "https://images.unsplash.com/photo-1497551064403-c0ea77dd36e6?w=400&h=400&fit=crop", // Simone
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop", // Virginia
+            "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=400&fit=crop", // Wangari
+            "https://images.unsplash.com/photo-1541233349642-6e425fe6190e?w=400&h=400&fit=crop", // Madre Teresa
+            "https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=400&h=400&fit=crop", // Anne
+            "https://images.unsplash.com/photo-1524666643752-b381eb00effb?w=400&h=400&fit=crop", // Dandara
+            "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=400&h=400&fit=crop", // Marielle
+            "https://images.unsplash.com/photo-1542295669297-4d352b042bca?w=400&h=400&fit=crop", // Carolina
+            "https://images.unsplash.com/photo-1492136344046-866c85e0bf04?w=400&h=400&fit=crop", // Chiquinha
+            "https://images.unsplash.com/photo-1505775520486-1f1ad41f6b8a?w=400&h=400&fit=crop", // Tarsila
+            "https://images.unsplash.com/photo-1573164574511-73c773193279?w=400&h=400&fit=crop", // Katherine
+            "https://images.unsplash.com/photo-1581089778245-3ce67677f718?w=400&h=400&fit=crop", // Mae
+            "https://images.unsplash.com/photo-1573496799515-eebbb63814f1?w=400&h=400&fit=crop", // Indira
+            "https://images.unsplash.com/photo-1541873676-a18131494184?w=400&h=400&fit=crop", // Margaret
+            "https://images.unsplash.com/photo-1535982396242-d0c5e5b1a832?w=400&h=400&fit=crop", // Angela
+            "https://images.unsplash.com/photo-1523365280597-f4219a7fb00e?w=400&h=400&fit=crop", // Oprah
+            "https://images.unsplash.com/photo-1544441893-675973e31985?w=400&h=400&fit=crop", // Serena
+            "https://images.unsplash.com/photo-1556817411-31ae72fa3ea0?w=400&h=400&fit=crop", // Marta
+            "https://images.unsplash.com/photo-1518611012118-696072233579?w=400&h=400&fit=crop", // Daiane
+            "https://images.unsplash.com/photo-1621128253730-0959bc5fadb7?w=400&h=400&fit=crop"  // Rayssa
+        ];
+
+        // ==========================================
+        // GALERIA - OBJETO GERENCIADOR (USA THIS)
+        // ==========================================
+        const galeria = {
+            pessoas: [],
+            filtroAtivo: 'all',
+            
+            inicializar() {
+                // Criar 30 pessoas com fotos reais
+                this.pessoas = MULHERES_INSPIRADORAS.map((mulher, index) => {
+                    return new Pessoa(
+                        mulher.id,
+                        mulher.nome,
+                        mulher.profissao,
+                        FOTOS_REAIS[index], // Foto real atribuída
+                        mulher.traits
+                    );
+                });
+                return this;
+            },
+            
+            filtrar(faixa) {
+                if (faixa === 'all') return this.pessoas;
+                return this.pessoas.filter(p => p.faixa === faixa);
+            },
+            
+            resetarTodas() {
+                this.pessoas.forEach(p => p.resetar());
+                return this;
+            },
+            
+            pontuacaoAleatoria() {
+                this.pessoas.forEach(p => {
+                    p.setPontuacao(Math.floor(Math.random() * 9) + 1);
+                });
+                return this;
+            },
+            
+            aumentarTodas() {
+                this.pessoas.forEach(p => p.admirar());
+                return this;
+            },
+            
+            estatisticas() {
+                return {
+                    total: this.pessoas.length,
+                    pontuacaoTotal: this.pessoas.reduce((acc, p) => acc + p.pontuacao, 0),
+                    verdes: this.pessoas.filter(p => p.faixa === 'green').length,
+                    amarelos: this.pessoas.filter(p => p.faixa === 'yellow').length,
+                    vermelhos: this.pessoas.filter(p => p.faixa === 'red').length,
+                    media: (this.pessoas.reduce((acc, p) => acc + p.pontuacao, 0) / this.pessoas.length).toFixed(1)
+                };
+            }
+        };
+
+        // ==========================================
+        // APLICAÇÃO PRINCIPAL
+        // ==========================================
+        class App {
+            constructor() {
+                this.galeria = galeria.inicializar();
+                this.grid = document.getElementById('cardGrid');
+                this.init();
+            }
+            
+            init() {
+                this.renderizarCards();
+                this.atualizarEstatisticas();
+                this.setupEventListeners();
+            }
+            
+            renderizarCards() {
+                const pessoasFiltradas = this.galeria.filtrar(this.galeria.filtroAtivo);
+                this.grid.innerHTML = '';
+                
+                pessoasFiltradas.forEach(pessoa => {
+                    const card = this.criarCard(pessoa);
+                    this.grid.appendChild(card);
+                });
+            }
+            
+            criarCard(pessoa) {
+                const card = document.createElement('div');
+                card.className = `card border-${pessoa.faixa}`;
+                card.dataset.id = pessoa.id;
+                
+                // Ícone da faixa
+                const icone = {
+                    'green': '💚',
+                    'yellow': '💛', 
+                    'red': '❤️'
+                }[pessoa.faixa];
+                
+                card.innerHTML = `
+                    <div class="card-image-container">
+                        <img src="${pessoa.imagem}" alt="${pessoa.nome}" class="card-image" loading="lazy">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-name">${pessoa.nome}</div>
+                        <div class="card-role">${pessoa.profissao}</div>
+                        <div class="score-container">
+                            <span class="score-badge">
+                                ${icone} ${pessoa.pontuacao}/10
+                            </span>
+                            <span style="color:rgba(255,255,255,0.5); font-size:0.75em;">
+                                🖱️ ${pessoa.interacoes}
+                            </span>
+                        </div>
+                        <div class="interaction-buttons">
+                            <button class="btn-icon btn-like" data-action="like">❤️ -1</button>
+                            <button class="btn-icon btn-admire" data-action="admire">💚 +1</button>
+                            <button class="btn-icon btn-reset" data-action="reset">🔄 5</button>
+                        </div>
+                    </div>
+                `;
+                
+                // EVENT LISTENERS
+                const img = card.querySelector('.card-image-container');
+                img.addEventListener('click', () => {
+                    pessoa.admirar();
+                    this.atualizarCard(pessoa);
+                    this.atualizarEstatisticas();
+                });
+                
+                card.querySelector('.btn-like').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pessoa.desadmirar();
+                    this.atualizarCard(pessoa);
+                    this.atualizarEstatisticas();
+                });
+                
+                card.querySelector('.btn-admire').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pessoa.admirar();
+                    this.atualizarCard(pessoa);
+                    this.atualizarEstatisticas();
+                });
+                
+                card.querySelector('.btn-reset').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    pessoa.resetar();
+                    this.atualizarCard(pessoa);
+                    this.atualizarEstatisticas();
+                });
+                
+                return card;
+            }
+            
+            atualizarCard(pessoa) {
+                const cardExistente = document.querySelector(`.card[data-id="${pessoa.id}"]`);
+                if (cardExistente) {
+                    const novoCard = this.criarCard(pessoa);
+                    cardExistente.replaceWith(novoCard);
+                }
+            }
+            
+            atualizarEstatisticas() {
+                const stats = this.galeria.estatisticas();
+                document.getElementById('totalScore').textContent = stats.pontuacaoTotal;
+                document.getElementById('totalGreen').textContent = stats.verdes;
+                document.getElementById('totalYellow').textContent = stats.amarelos;
+                document.getElementById('totalRed').textContent = stats.vermelhos;
+                document.getElementById('totalAvg').textContent = stats.media;
+            }
+            
+            setupEventListeners() {
+                // FILTROS
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.galeria.filtroAtivo = e.target.dataset.filter;
+                        this.renderizarCards();
+                    });
+                });
+                
+                // BOTÕES GLOBAIS
+                document.getElementById('resetAllBtn').addEventListener('click', () => {
+                    this.galeria.resetarTodas();
+                    this.renderizarCards();
+                    this.atualizarEstatisticas();
+                });
+                
+                document.getElementById('randomizeBtn').addEventListener('click', () => {
+                    this.galeria.pontuacaoAleatoria();
+                    this.renderizarCards();
+                    this.atualizarEstatisticas();
+                });
+                
+                document.getElementById('boostAllBtn').addEventListener('click', () => {
+                    this.galeria.aumentarTodas();
+                    this.renderizarCards();
+                    this.atualizarEstatisticas();
+                });
+            }
+        }
+
+        // INICIALIZAR QUANDO A PÁGINA CARREGAR
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new App();
+        });
+    </script>
+</body>
+</html>
